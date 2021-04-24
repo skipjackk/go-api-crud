@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -30,7 +31,19 @@ type Result struct {
 }
 
 func main() {
-	db, err = gorm.Open("mysql", "root:12345@/go_rest_api?charset=utf8&parseTime=True&loc=Local")
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		log.Fatal("$PORT is not set")
+	}
+
+	dns := os.Getenv("DATABASE_URL")
+
+	if dns == "" {
+		log.Fatal("$DATABASE_URL is not set")
+	}
+
+	db, err = gorm.Open("mysql", "vsb6ig2gv6zc066m:szectndz2gcu0r57@eyw6324oty5fsovx.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/f1uje8ak4fcxhh3l")
 
 	if err != nil {
 		log.Println("failed", err)
@@ -44,7 +57,7 @@ func main() {
 }
 
 func handleRequest() {
-	log.Print("server start at http://127.0.0.1:7777")
+	// log.Print("server start at http://127.0.0.1:7777")
 	myRouter := mux.NewRouter().StrictSlash(true)
 	myRouter.HandleFunc("/", homepage)
 	myRouter.HandleFunc("/api/products", createProduct).Methods("POST")
@@ -52,7 +65,7 @@ func handleRequest() {
 	myRouter.HandleFunc("/api/products/{id}", getProduct).Methods("GET")
 	myRouter.HandleFunc("/api/products/{id}", updateProduct).Methods("PUT")
 	myRouter.HandleFunc("/api/products/{id}", deleteProduct).Methods("DELETE")
-	log.Fatal(http.ListenAndServe(":7777", myRouter))
+	// log.Fatal(http.ListenAndServe(":7777", myRouter))
 }
 
 func homepage(w http.ResponseWriter, r *http.Request) {

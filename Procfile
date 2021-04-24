@@ -1,1 +1,1 @@
-"web: currency" 
+web: bin/go-api-crud
